@@ -27,3 +27,4 @@ To use it on another site: copy `swarm-motion.js` and add
 
 If your page reveals content on scroll, listen for the `swarm-motion:before-collect` event and make
 everything visible (see the bottom of `app.js`).
+portfolio deployment update
