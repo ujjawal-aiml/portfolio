@@ -27,7 +27,7 @@ window.SITE = {
       'Outside code, I’ve been a freelance content creator since 2023, editing promotional and social-media video ' +
         'for brands such as Japam India and Souled Theory — which taught me storytelling, pacing and delivering to deadlines.'
     ],
-    portrait: 'assets/portrait.jpeg',
+    portrait: 'portrait.jpeg',
     portraitAlt: 'Portrait of Ujjawal Chaurasia',
     resume: 'assets/resume.pdf'
   },
