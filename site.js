@@ -14,7 +14,7 @@ window.SITE = {
     profession: 'AI & ML Developer',
     roleLine2: 'B.Tech CSE (AI & ML) · GenAI · RAG · Full-stack',
     location: 'Noida, India',
-    availability: '',  // e.g. "Open to internships" — empty hides it
+    availability: 'OPEN TO WORK',  // e.g. "Open to internships" — empty hides it
     headline: 'Turning data and language models into working AI apps.',
     intro:
       'Computer Science (AI & ML) student building LLM apps, RAG pipelines and machine-learning models — ' +
@@ -27,15 +27,15 @@ window.SITE = {
       'Outside code, I’ve been a freelance content creator since 2023, editing promotional and social-media video ' +
         'for brands such as Japam India and Souled Theory — which taught me storytelling, pacing and delivering to deadlines.'
     ],
-    portrait: 'assets/portrait.jpg',
+    portrait: 'assets/portrait.jpeg',
     portraitAlt: 'Portrait of Ujjawal Chaurasia',
     resume: 'assets/resume.pdf'
   },
 
   contact: {
     email: 'ujjawalchaurasiamau8@gmail.com',
-    phone: '',     // resume lists a phone number; hidden on the page — add it here if you want it public
-    whatsapp: '',
+    phone: '+91 8115544392',     // resume lists a phone number; hidden on the page — add it here if you want it public
+    whatsapp: '+91 8115544392',
     github: 'https://github.com/ujjawal-aiml',
     linkedin: 'https://www.linkedin.com/in/ujjawal-chaurasia-246966223/'
   },
