@@ -29,7 +29,7 @@ window.SITE = {
     ],
     portrait: 'portrait.jpeg',
     portraitAlt: 'Portrait of Ujjawal Chaurasia',
-    resume: 'assets/resume.pdf'
+    resume: 'Ujjawal_Chaurasia_Resume_final.pdf'
   },
 
   contact: {
