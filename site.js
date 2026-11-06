@@ -6,10 +6,10 @@ window.SITE = {
   websiteUrl: '', // add your final domain here when you deploy (used for the canonical tag if set)
 
   identity: {
-    fullName: 'Ujjawal Chaurasia',
+    fullName: 'Ujjawal Nagvanshi',
     displayName: 'Ujjawal',
     firstName: 'Ujjawal',
-    lastName: 'Chaurasia',
+    lastName: 'Nagvanshi',
     initials: 'UC',
     profession: 'AI & ML Developer',
     roleLine2: 'B.Tech CSE (AI & ML) · GenAI · RAG · Full-stack',
@@ -33,7 +33,7 @@ window.SITE = {
   },
 
   contact: {
-    email: 'ujjawalchaurasiamau8@gmail.com',
+    email: 'rajtime.online@gmail.com',
     phone: '+91 8115544392',     // resume lists a phone number; hidden on the page — add it here if you want it public
     whatsapp: '+91 8115544392',
     github: 'https://github.com/ujjawal-aiml',
