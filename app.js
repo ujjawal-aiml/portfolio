@@ -52,6 +52,8 @@
   // Hero
   var hero = h('section', { class: 'hero', id: 'top', 'aria-label': 'Introduction' },
     heroArt(),
+    I.portrait ? h('figure', { class: 'portrait' },
+      h('img', { src: I.portrait, alt: I.portraitAlt || I.fullName, width: 900, height: 870, decoding: 'async', fetchpriority: 'high' })) : null,
     h('div', { class: 'wrap' },
       h('span', { class: 'hello', text: 'Hi, I’m' }),
       h('h1', { class: 'name', 'aria-label': I.fullName },
@@ -73,12 +75,79 @@
         : null));
   main.appendChild(hero);
 
-  // Work
+  // Marquee ticker (decorative; hidden from screen readers)
+  if (S.marquee && S.marquee.length) {
+    var run = function () { return S.marquee.map(function (t) { return h('span', { text: t }); }); };
+    main.appendChild(h('div', { class: 'marquee', 'aria-hidden': 'true' },
+      h('div', { class: 'marquee-track' }, run(), run(), run(), run())));
+  }
+
+  // What I do
+  if (S.services && S.services.length) {
+    main.appendChild(section('services', 'Services', [
+      h('span', { class: 'eyebrow', text: 'What I do' }),
+      h('h2', { class: 'h2 reveal', id: 'services-h' }, 'Where I can ', h('em', { text: 'help' })),
+      h('div', { class: 'svc-grid' }, S.services.map(function (s, i) {
+        return h('article', { class: 'svc reveal' },
+          h('span', { class: 'svc-n', 'aria-hidden': 'true', text: (i + 1 < 10 ? '0' : '') + (i + 1) }),
+          h('h3', { text: s.title }), h('p', { text: s.text }));
+      }))
+    ]));
+  }
+
+  // Work (with category filter + search)
   if (S.projects && S.projects.length) {
+    var grid = h('div', { class: 'grid', id: 'project-grid' });
+    var empty = h('p', { class: 'empty', hidden: true, text: 'No projects match that search. Try another keyword or category.' });
+    var cats = ['All'];
+    S.projects.forEach(function (p) { if (cats.indexOf(p.category) < 0) cats.push(p.category); });
+    var activeCat = 'All', query = '';
+    var search = h('input', { type: 'search', id: 'project-search', placeholder: 'Search projects or tools…', 'aria-label': 'Search projects' });
+    var count = h('p', { class: 'sr', role: 'status', 'aria-live': 'polite' });
+    var filterBar = h('div', { class: 'filters', role: 'group', 'aria-label': 'Filter projects by category' });
+    var chipEls = cats.map(function (c) {
+      var b = h('button', { type: 'button', class: 'filter', 'aria-pressed': c === 'All' ? 'true' : 'false', text: c });
+      b.addEventListener('click', function () { activeCat = c; renderProjects(); });
+      filterBar.appendChild(b);
+      return b;
+    });
+    function renderProjects() {
+      var q = query.trim().toLowerCase();
+      var list = S.projects.filter(function (p) {
+        var inCat = activeCat === 'All' || p.category === activeCat;
+        var hay = (p.title + ' ' + p.subtitle + ' ' + p.summary + ' ' + p.category + ' ' + p.tools.join(' ')).toLowerCase();
+        return inCat && (!q || hay.indexOf(q) >= 0);
+      });
+      grid.textContent = '';
+      list.forEach(function (p) {
+        var card = projectCard(p, S.projects.indexOf(p));
+        card.classList.add('in');
+        grid.appendChild(card);
+      });
+      empty.hidden = list.length > 0;
+      chipEls.forEach(function (b) { b.setAttribute('aria-pressed', b.textContent === activeCat ? 'true' : 'false'); });
+      count.textContent = list.length + (list.length === 1 ? ' project shown' : ' projects shown');
+    }
+    search.addEventListener('input', function () { query = search.value; renderProjects(); });
     main.appendChild(section('work', 'Work', [
       h('span', { class: 'eyebrow', text: 'Selected work' }),
       h('h2', { class: 'h2 reveal', id: 'work-h' }, 'Things I’ve ', h('em', { text: 'built' })),
-      h('div', { class: 'grid' }, S.projects.map(projectCard))
+      h('div', { class: 'toolbar' }, filterBar, search),
+      count, grid, empty
+    ]));
+    renderProjects();
+  }
+
+  // How I build
+  if (S.process && S.process.length) {
+    main.appendChild(section('process', 'Process', [
+      h('span', { class: 'eyebrow', text: 'Process' }),
+      h('h2', { class: 'h2 reveal', id: 'process-h' }, 'How I ', h('em', { text: 'build' })),
+      h('ol', { class: 'steps' }, S.process.map(function (s) {
+        return h('li', { class: 'step reveal' },
+          h('span', { class: 'step-n', 'aria-hidden': 'true', text: s.step }),
+          h('div', null, h('h3', { text: s.title }), h('p', { text: s.text })));
+      }))
     ]));
   }
 
@@ -125,8 +194,14 @@
     main.appendChild(section('experience', 'Experience', blocks));
   }
 
-  // Contact
+  // Closing call-to-action band
   var mailHref = 'mailto:' + C.email;
+  main.appendChild(h('section', { class: 'band', 'aria-label': 'Call to action' },
+    h('div', { class: 'wrap' },
+      h('p', { class: 'band-t reveal' }, 'Have an AI idea? ', h('em', { text: 'Let’s build it.' })),
+      h('a', { class: 'btn primary magnetic', href: '#contact', text: 'Start a conversation' }))));
+
+  // Contact
   main.appendChild(section('contact', 'Contact', [
     h('span', { class: 'eyebrow', text: 'Contact' }),
     h('h2', { class: 'h2 reveal', id: 'contact-h' }, 'Let’s ', h('em', { text: 'talk' })),
@@ -147,6 +222,8 @@
     menu.appendChild(h('li', null, h('a', { href: '#' + n.id, 'data-id': n.id, text: n.label })));
   });
   menu.appendChild(h('li', null, h('a', { class: 'cta', href: '#contact', 'data-id': 'contact', text: 'Contact' })));
+  var animBtn = h('button', { type: 'button', class: 'anim-toggle', 'aria-pressed': 'true', 'aria-label': 'Page animations' }, h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'anim-l', text: 'Animations: On' }));
+  menu.appendChild(h('li', null, animBtn));
 
   // Footer
   var foot = document.getElementById('footer');
@@ -290,10 +367,48 @@
   } else {
     reveals.forEach(function (el) { el.classList.add('in'); });
   }
+  /* ---------- animations on/off (remembered; defaults to off if the OS asks for reduced motion) ---------- */
+  var KEY = 'uc-portfolio-animations';
+  var animOn = !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  try { var saved = localStorage.getItem(KEY); if (saved === 'on' || saved === 'off') animOn = saved === 'on'; } catch (e) { /* storage blocked */ }
+  function applyAnim() {
+    root.setAttribute('data-anim', animOn ? 'on' : 'off');
+    animBtn.setAttribute('aria-pressed', animOn ? 'true' : 'false');
+    animBtn.querySelector('.anim-l').textContent = 'Animations: ' + (animOn ? 'On' : 'Off');
+    if (!animOn) document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+  }
+  animBtn.addEventListener('click', function () {
+    animOn = !animOn;
+    try { localStorage.setItem(KEY, animOn ? 'on' : 'off'); } catch (e) { /* ignore */ }
+    applyAnim();
+  });
+  applyAnim();
+
+  /* ---------- hero parallax + magnetic buttons (fine pointers only, never required) ---------- */
+  var fine = window.matchMedia && matchMedia('(pointer:fine)').matches;
+  var art = document.querySelector('.hero-art');
+  if (art) {
+    addEventListener('scroll', function () {
+      if (!animOn || scrollY > innerHeight) return;
+      art.style.transform = 'translateY(calc(-50% + ' + (scrollY * 0.18) + 'px))';
+    }, { passive: true });
+  }
+  if (fine) {
+    document.querySelectorAll('.magnetic, .hero .btn.primary').forEach(function (el) {
+      el.addEventListener('pointermove', function (e) {
+        if (!animOn) return;
+        var r = el.getBoundingClientRect();
+        el.style.translate = ((e.clientX - r.left - r.width / 2) * 0.18) + 'px ' + ((e.clientY - r.top - r.height / 2) * 0.28) + 'px';
+      });
+      el.addEventListener('pointerleave', function () { el.style.translate = ''; });
+    });
+  }
+
   // The Motion effect snapshots the page; settle every reveal first so nothing is left invisible.
   document.addEventListener('swarm-motion:before-collect', function () {
     root.classList.add('no-trans');
-    reveals.forEach(function (el) { el.classList.add('in'); });
+    document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+    if (art) art.style.transform = '';
     void document.body.offsetHeight;
     root.classList.remove('no-trans');
   });

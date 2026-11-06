@@ -27,6 +27,8 @@ window.SITE = {
       'Outside code, I’ve been a freelance content creator since 2023, editing promotional and social-media video ' +
         'for brands such as Japam India and Souled Theory — which taught me storytelling, pacing and delivering to deadlines.'
     ],
+    portrait: 'assets/portrait.jpg',
+    portraitAlt: 'Portrait of Ujjawal Chaurasia',
     resume: 'assets/resume.pdf'
   },
 
@@ -42,6 +44,25 @@ window.SITE = {
     { value: '130+', label: 'LeetCode problems solved' },
     { value: '284,808', label: 'transactions in the fraud-detection pipeline' },
     { value: '2027', label: 'B.Tech graduation (expected)' }
+  ],
+
+  // Scrolling ticker under the hero (uses real skills; edit freely)
+  marquee: ['LangChain', 'RAG Pipelines', 'Google Gemini', 'FastAPI', 'Scikit-learn', 'ChromaDB', 'Python', 'Node.js', 'Prompt Engineering', 'Streamlit'],
+
+  // "What I do" — each line is backed by a project or role on the resume
+  services: [
+    { title: 'LLM & RAG apps', text: 'Retrieval pipelines over documents with LangChain, Gemini and a vector database (ChromaDB), as in DigiCare.' },
+    { title: 'Machine-learning pipelines', text: 'Preprocessing, class-imbalance handling, model training and benchmarking, as in the 284,808-transaction fraud detector.' },
+    { title: 'AI backends & APIs', text: 'Async AI services in FastAPI alongside Node.js, secured with JWT and connected to MongoDB.' },
+    { title: 'Video & content editing', text: 'Promotional and social-media video for brands since 2023, with a focus on storytelling and pacing.' }
+  ],
+
+  // "How I build" — the workflow that runs through the projects above
+  process: [
+    { step: '01', title: 'Understand the data', text: 'Clean, explore and shape the data, and handle problems like class imbalance before any model is trained.' },
+    { step: '02', title: 'Prototype & benchmark', text: 'Try several models or prompt chains, such as KNN, Logistic Regression and Decision Tree, and compare them on unseen data.' },
+    { step: '03', title: 'Wrap it as a service', text: 'Expose the model or pipeline through an API (FastAPI / Node.js) with authentication and storage.' },
+    { step: '04', title: 'Ship an interface', text: 'Put a usable front end on top, for example a Streamlit app, so people can try it live.' }
   ],
 
   projects: [

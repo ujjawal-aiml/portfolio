@@ -13,6 +13,7 @@
  *   data-label="Motion"   button text
  *   data-speed="1"        1, 2, 3 ... build speed multiplier
  *   data-cursors="7"      number of cursors (default 7 desktop / 4 mobile)
+ *   data-position="left"  put the button top-left (next to a logo) instead of top-centre
  *   data-manual           don't auto-add the button; call SwarmMotion.mount() yourself
  * API: window.SwarmMotion = { mount, start, stop, toggle }
  */
@@ -28,7 +29,8 @@
     fixedSpeed: ds.speed !== undefined,   // otherwise speed adapts to page size (~30-45s per run)
     cursors: parseInt(ds.cursors, 10) || 0,
     maxTasks: 450,
-    manual: ds.manual !== undefined
+    manual: ds.manual !== undefined,
+    position: ds.position || 'center'          // 'center' or 'left'
   };
 
   var NAMES = ['Ada', 'Linus', 'Grace', 'Alan', 'Margaret', 'Tim', 'Hedy', 'Dennis', 'Radia', 'Ken'];
@@ -49,13 +51,13 @@
   var UI_CSS =
     '.veil{position:fixed;inset:0;opacity:0;pointer-events:none;transition:opacity .35s ease}' +
     'canvas{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none}' +
-    '.btn{pointer-events:auto;position:fixed;top:max(14px,env(safe-area-inset-top));left:50%;' +
-    'transform:translateX(-50%);display:inline-flex;align-items:center;gap:8px;padding:9px 16px 9px 13px;' +
+    '.btn{pointer-events:auto;position:fixed;top:max(14px,env(safe-area-inset-top));left:var(--sw-left,50%);' +
+    'transform:translateX(var(--sw-tx,-50%));display:inline-flex;align-items:center;gap:8px;padding:9px 16px 9px 13px;' +
     'border:0;border-radius:999px;background:#111;color:#fff;' +
     'font:600 13px/1 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.01em;cursor:pointer;' +
     'box-shadow:0 1px 2px rgba(0,0,0,.2),0 6px 20px rgba(0,0,0,.22);transition:background .2s,transform .15s}' +
-    '.btn:hover{transform:translateX(-50%) translateY(-1px)}' +
-    '.btn:active{transform:translateX(-50%) scale(.97)}' +
+    '.btn:hover{transform:translateX(var(--sw-tx,-50%)) translateY(-1px)}' +
+    '.btn:active{transform:translateX(var(--sw-tx,-50%)) scale(.97)}' +
     '.btn:focus-visible{outline:2px solid #0d99ff;outline-offset:3px}' +
     '.btn[aria-pressed=true]{background:#0d99ff}' +
     '@media (prefers-reduced-motion:reduce){.veil,.btn{transition:none}}';
@@ -646,6 +648,10 @@
     host = document.createElement('div');
     host.id = 'swarm-motion-host';
     host.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:2147483647;';
+    if (OPT.position === 'left') {            // sits beside a left-aligned logo instead of the top centre
+      host.style.setProperty('--sw-left', 'calc(clamp(20px,5vw,56px) + 84px)');
+      host.style.setProperty('--sw-tx', '0px');
+    }
     root = host.attachShadow({ mode: 'open' });
     root.innerHTML =
       '<style>' + UI_CSS + '</style><div class="veil"></div><canvas></canvas>' +
