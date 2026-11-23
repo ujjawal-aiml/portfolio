@@ -33,7 +33,7 @@ window.SITE = {
   },
 
   contact: {
-    email: 'rajtime.online@gmail.com',
+    email: 'ujjawalchaurasiamau8@gmail.com',
     phone: '+91 8115544392',     // resume lists a phone number; hidden on the page — add it here if you want it public
     whatsapp: '+91 8115544392',
     github: 'https://github.com/ujjawal-aiml',
